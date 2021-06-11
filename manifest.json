@@ -1,10 +1,10 @@
 {
-	"id": "obsidian-sample-plugin",
-	"name": "Sample Plugin",
-	"version": "1.0.1",
+	"id": "obsidian-bible-references-plugin",
+	"name": "Bible References Plugin",
+	"version": "0.0.1",
 	"minAppVersion": "0.9.12",
-	"description": "This is a sample plugin for Obsidian. This plugin demonstrates some of the capabilities of the Obsidian API.",
-	"author": "Obsidian",
-	"authorUrl": "https://obsidian.md/about",
+	"description": "This is an obsidian plugin for automatically pulling Bible vereses from the ESV.org API and generating notes for them.",
+	"author": "Scott Tomaszewski",
+	"authorUrl": "todo",
 	"isDesktopOnly": false
 }
