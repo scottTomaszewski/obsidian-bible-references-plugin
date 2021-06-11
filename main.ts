@@ -3,6 +3,7 @@ import {App, DataWriteOptions, Plugin, PluginSettingTab, Setting} from 'obsidian
 interface BibleReferenceSettings {
     esvOrgApiToken: string;
     passageDirectory: string;
+    footerLinkName: string;
 
     includePassageReferences: boolean;
     includeVerseNumbers: boolean;
@@ -25,6 +26,7 @@ interface BibleReferenceSettings {
 const DEFAULT_SETTINGS: BibleReferenceSettings = {
     esvOrgApiToken: 'default',
     passageDirectory: "Bible Passages",
+    footerLinkName: "ESV Bible Passage",
 
     includePassageReferences: true,
     includeVerseNumbers: true,
@@ -206,7 +208,10 @@ export default class MyPlugin extends Plugin {
             content += "]]**\n";
         }
 
-        content += "[[ESV Bible Passage]]\n"
+        // Add footer link
+        if (this.settings.footerLinkName != "") {
+            content += "\n[[" + this.settings.footerLinkName + "]]\n"
+        }
 
         return content
     }
@@ -251,13 +256,24 @@ class SampleSettingTab extends PluginSettingTab {
                 })
             );
 
+        new Setting(containerEl)
+            .setName("Footer Link Text")
+            .setDesc("Links placed at the bottom of passage notes will use this value.  Empty text will not place link")
+            .addText(c => c
+                .setValue(this.plugin.settings.footerLinkName)
+                .onChange(async value => {
+                    this.plugin.settings.footerLinkName = value;
+                    await this.plugin.saveSettings();
+                    this.plugin.debugLog("New footerLinkName set: " + value);
+                })
+            );
+
         this.newBooleanSetting("debugMode", containerEl, "If enabled, debug mode will print extra info to the console.");
 
         containerEl.createEl("h1", {text: "Query Setting"})
-        containerEl.createEl("h3", {text: "Details can be found at:"})
         containerEl.createEl("a", {
             href: "https://api.esv.org/docs/passage-html",
-            text: "https://api.esv.org/docs/passage-html"
+            text: "Details at https://api.esv.org/docs/passage-html"
         })
 
         this.newBooleanSetting("includePassageReferences", containerEl, "Include the passage reference before the text.");
