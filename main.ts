@@ -196,15 +196,17 @@ export default class MyPlugin extends Plugin {
         // add passage html
         content += passageJsonData["passages"].join("\n");
 
+        content += "\n\n---\n\n";
+
         // Add full chapter link iff not already a chapter
         if (canonical.contains(":")) {
             const chapter = canonical.split(":")[0];
-            content += "\n\n---\n\n";
             content += "Passage from **[[";
             content += chapter;
             content += "]]**\n";
         }
 
+        content += "[[ESV Bible Passage]]\n"
 
         return content
     }
@@ -253,7 +255,10 @@ class SampleSettingTab extends PluginSettingTab {
 
         containerEl.createEl("h1", {text: "Query Setting"})
         containerEl.createEl("h3", {text: "Details can be found at:"})
-        containerEl.createEl("a", {href: "https://api.esv.org/docs/passage-html", text: "https://api.esv.org/docs/passage-html"})
+        containerEl.createEl("a", {
+            href: "https://api.esv.org/docs/passage-html",
+            text: "https://api.esv.org/docs/passage-html"
+        })
 
         this.newBooleanSetting("includePassageReferences", containerEl, "Include the passage reference before the text.");
         this.newBooleanSetting("includeVerseNumbers", containerEl, "Include verse numbers.");
