@@ -4,6 +4,8 @@ interface BibleReferenceSettings {
     esvOrgApiToken: string;
     passageDirectory: string;
     footerLinkName: string;
+    footerTagText: string;
+    debugMode: boolean;
 
     includePassageReferences: boolean;
     includeVerseNumbers: boolean;
@@ -18,15 +20,16 @@ interface BibleReferenceSettings {
     includeChapterNumbers: boolean;
     includeSubheadings: boolean;
     includeAudioLink: boolean;
-    attachAudioLinkTo: string;
 
-    debugMode: boolean;
+    attachAudioLinkTo: string;
 }
 
 const DEFAULT_SETTINGS: BibleReferenceSettings = {
     esvOrgApiToken: 'default',
     passageDirectory: "Bible Passages",
-    footerLinkName: "ESV Bible Passage",
+    footerLinkName: "",
+    footerTagText: "ESVBiblePassage",
+    debugMode: false,
 
     includePassageReferences: true,
     includeVerseNumbers: true,
@@ -42,8 +45,6 @@ const DEFAULT_SETTINGS: BibleReferenceSettings = {
     includeSubheadings: true,
     includeAudioLink: true,
     attachAudioLinkTo: "passage",
-
-    debugMode: false,
 }
 
 const pluginDisplayName = "Bible Reference Plugin";
@@ -205,12 +206,15 @@ export default class MyPlugin extends Plugin {
             const chapter = canonical.split(":")[0];
             content += "Passage from **[[";
             content += chapter;
-            content += "]]**\n";
+            content += "]]**\n\n";
         }
 
-        // Add footer link
+        // Add footer link + tag
         if (this.settings.footerLinkName != "") {
-            content += "\n[[" + this.settings.footerLinkName + "]]\n"
+            content += "[[" + this.settings.footerLinkName + "]]\n"
+        }
+        if (this.settings.footerTagText != "") {
+            content += "#" + this.settings.footerTagText + "\n"
         }
 
         return content
@@ -258,13 +262,25 @@ class SampleSettingTab extends PluginSettingTab {
 
         new Setting(containerEl)
             .setName("Footer Link Text")
-            .setDesc("Links placed at the bottom of passage notes will use this value.  Empty text will not place link")
+            .setDesc("Link placed at the bottom of passage notes will use this value.  Empty text will not place link")
             .addText(c => c
                 .setValue(this.plugin.settings.footerLinkName)
                 .onChange(async value => {
                     this.plugin.settings.footerLinkName = value;
                     await this.plugin.saveSettings();
                     this.plugin.debugLog("New footerLinkName set: " + value);
+                })
+            );
+
+        new Setting(containerEl)
+            .setName("Footer Tag Text")
+            .setDesc("Tag placed at the bottom of passage notes will use this value.  Empty text will not place tag")
+            .addText(c => c
+                .setValue(this.plugin.settings.footerTagText)
+                .onChange(async value => {
+                    this.plugin.settings.footerTagText = value;
+                    await this.plugin.saveSettings();
+                    this.plugin.debugLog("New footerTextName set: " + value);
                 })
             );
 
