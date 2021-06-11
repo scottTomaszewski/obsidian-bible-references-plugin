@@ -1,5 +1,7 @@
 # Obsidian Bible Reference Plugin
 
+![bible_reference_plugin_0 0 1](https://user-images.githubusercontent.com/5295276/121619998-8ba83200-ca37-11eb-8123-b948594d2fdc.gif)
+
 I will get this plugin registered in the community plugins when there is some testing and stability. Until then...
 
 ## Basic Installation
