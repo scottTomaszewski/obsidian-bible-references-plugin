@@ -2,7 +2,7 @@
 
 ## 0.0.3
 
-- Adds a (configurable) tatg to the footer of passage notes to unify them all
+- Adds a (configurable) tag to the footer of passage notes to unify them all
 
 ## 0.0.2
 
