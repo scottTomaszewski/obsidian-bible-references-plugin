@@ -1,5 +1,9 @@
 # Change Log
 
+## 0.0.4 (unreleased)
+
+- Adds a setting to enable/disable the footer chapter links 
+
 ## 0.0.3
 
 - Adds a (configurable) tag to the footer of passage notes to unify them all

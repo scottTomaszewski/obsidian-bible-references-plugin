@@ -3,6 +3,7 @@ import {App, DataWriteOptions, Plugin, PluginSettingTab, Setting} from 'obsidian
 interface BibleReferenceSettings {
     esvOrgApiToken: string;
     passageDirectory: string;
+    footerLinkToChapter: boolean;
     footerLinkName: string;
     footerTagText: string;
     debugMode: boolean;
@@ -20,13 +21,13 @@ interface BibleReferenceSettings {
     includeChapterNumbers: boolean;
     includeSubheadings: boolean;
     includeAudioLink: boolean;
-
     attachAudioLinkTo: string;
 }
 
 const DEFAULT_SETTINGS: BibleReferenceSettings = {
     esvOrgApiToken: 'default',
     passageDirectory: "Bible Passages",
+    footerLinkToChapter: false,
     footerLinkName: "",
     footerTagText: "ESVBiblePassage",
     debugMode: false,
@@ -202,7 +203,7 @@ export default class MyPlugin extends Plugin {
         content += "\n\n---\n\n";
 
         // Add full chapter link iff not already a chapter
-        if (canonical.contains(":")) {
+        if (this.settings.footerLinkToChapter && canonical.contains(":")) {
             const chapter = canonical.split(":")[0];
             content += "Passage from **[[";
             content += chapter;
@@ -259,6 +260,8 @@ class SampleSettingTab extends PluginSettingTab {
                     this.plugin.debugLog("New passageDirectory set: " + value);
                 })
             );
+
+        this.newBooleanSetting("Footer Link to Chapter", containerEl, "Include a link to the full chapter at the bottom of a passage note.");
 
         new Setting(containerEl)
             .setName("Footer Link Text")
