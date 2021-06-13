@@ -1,6 +1,6 @@
 # Change Log
 
-## 0.0.4 (unreleased)
+## 0.0.4
 
 - Adds a setting to enable/disable the footer chapter links
 - Adds a dedicated API token for users
