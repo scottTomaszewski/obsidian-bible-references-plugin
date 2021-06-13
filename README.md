@@ -11,13 +11,17 @@ I will get this plugin registered in the community plugins when there is some te
 2. Extract the archive to your `<vault_path>/.obsidian/plugins/` folder
 3. Make sure you have community plugins enabled (Settings > Community Plugins > Safe Mode OFF)
 4. Enable the Bible Reference Plugin (Settings > Community Plugins > toggle the plugin)
-5. Add your ESV.org API token in the settings
 
 ## ESV.org API Token
 
-The ESV.org API requires a token which you need to generate on their website after creating an
-account (https://api.esv.org/account/create-application). I'll see about making one to share (there are API limits), but
-for now you need your own. I think token generation is manual, so it may take a few days for them to respond.
+The ESV.org API requires a token to use.  A public token is provided by default, but there are caps imposed by ESV.org. 
+For details on thresholds, see [https://api.esv.org/#conditions](https://api.esv.org/#conditions).  Please be
+considerate and rate-limit yourselves to not exceed the threshold.  If caps are exceeded excessively, I will
+implement limits and/or disable the public token.
+
+If you plan on using this plugin to pull an excessive amount of passages, I would appreciate if you would generate your
+own API token to avoid exceeding the threshold and locking out others using the public token. You can get a token by 
+creating an account and requesting a token (https://api.esv.org/account/create-application). 
 
 ## Manual Installation
 
@@ -33,4 +37,4 @@ for now you need your own. I think token generation is manual, so it may take a 
 ### Manually installing the plugin
 
 - Copy over `main.js`, `styles.css`, `manifest.json` to your
-  vault `VaultFolder/.obsidian/plugins/obsidian-bible-reference-plugin/`.
+  vault `<vault_path>/.obsidian/plugins/obsidian-bible-reference-plugin/`.

@@ -25,7 +25,7 @@ interface BibleReferenceSettings {
 }
 
 const DEFAULT_SETTINGS: BibleReferenceSettings = {
-    esvOrgApiToken: 'default',
+    esvOrgApiToken: '5bea343abb51ab0434a6e929081ab1c4964feef7',
     passageDirectory: "Bible Passages",
     footerLinkToChapter: false,
     footerLinkName: "",
@@ -72,7 +72,13 @@ export default class MyPlugin extends Plugin {
             //@ts-ignore
             this.app.workspace.on('hover-link', async (e: any) => {
                 if (e.source == "preview" || e.source == "editor") {
+                    console.log(e);
                     const reference = e.linktext;
+                    const embeddedLink = e.event.fromElement.parentNode.childNodes[0].data == "!";
+
+                    if (embeddedLink) {
+                        console.log("EMBEDDED");
+                    }
 
                     // Check the link text against reference regex
                     if (!bibleRefRegex.test(reference)) {
