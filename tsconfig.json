@@ -11,9 +11,9 @@
     "importHelpers": true,
     "lib": [
       "dom",
-      "es5",
+      "es6",
       "scripthost",
-      "es2015"
+      "es2021"
     ]
   },
   "include": [

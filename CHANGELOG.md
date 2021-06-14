@@ -1,5 +1,9 @@
 # Change Log
 
+## Unreleased
+
+- Supports embedded links with dedicated settings
+
 ## 0.0.4
 
 - Adds a setting to enable/disable the footer chapter links
