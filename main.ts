@@ -154,9 +154,11 @@ export default class BibleReferencePlugin extends Plugin {
             canonicalRef = await this.createNoteFromReference(reference, passageFolder, isEmbeddedLink)
         }
 
-        // Update links within the active note to be canonical form
-        const canonicalLinkText = passageFolder + "/" + canonicalRef + "|" + canonicalRef;
-        await this.updateActiveNoteLinks(e, canonicalLinkText, isEmbeddedLink);
+        if (canonicalRef != null) {
+            // Update links within the active note to be canonical form
+            const canonicalLinkText = passageFolder + "/" + canonicalRef + "|" + canonicalRef;
+            await this.updateActiveNoteLinks(e, canonicalLinkText, isEmbeddedLink);
+        }
     }
 
     /**
