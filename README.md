@@ -42,3 +42,11 @@ creating an account and requesting a token (https://api.esv.org/account/create-a
 
 - Copy over `main.js`, `styles.css`, `manifest.json` to your
   vault `<vault_path>/.obsidian/plugins/obsidian-bible-reference-plugin/`.
+  
+## TODO
+
+- Get the plugin in the repository 
+- Customizable (css) embedded passages
+    - Selectable embedded passage "themes"
+- API error checking
+- List out all verses in passage note so that they link

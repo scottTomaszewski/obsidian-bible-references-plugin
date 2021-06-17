@@ -83,12 +83,6 @@ const bibleRefRegex = new RegExp("(?:\\d+ ?)?[a-z]+ ?\\d+(?:(?::\\d+)?(?: ?- ?(?
 export default class BibleReferencePlugin extends Plugin {
     settings: BibleReferenceSettings;
 
-    debugLog(message: string) {
-        if (this.settings.debugMode) {
-            console.log("[DEBUG] " + message);
-        }
-    }
-
     async onload() {
         console.log('Loading ' + pluginDisplayName);
         await this.loadSettings();
@@ -263,12 +257,15 @@ export default class BibleReferencePlugin extends Plugin {
         content += "aliases: [";
         content += Array.from(aliases).join(", ");
         content += "]\n";
-        content += "query_timestamp: " + Date.now() + "\n"
+        content += "query_timestamp: " + Date.now() + "\n";
+        content += embedded ? "tags: [" + this.settings.footerTagText + "]\n" : "";
         content += "---\n\n";
 
         // add passage html
-        content += passageJsonData["passages"].join("\n");
-
+        const contentLink = "\n[[" + this.settings.passageDirectory + "/" + canonical + "|" + canonical + "]] ([ESV](http://www.esv.org))"
+        content += passageJsonData["passages"]
+            .join("\n")
+            .replace("<p>(<a href=\"http://www.esv.org\" class=\"copyright\">ESV</a>)</p>", contentLink);
 
         if (!embedded) {
             content += "\n\n---\n\n";
@@ -325,6 +322,12 @@ export default class BibleReferencePlugin extends Plugin {
             const updatedText = currNoteContent.replaceAll(new RegExp(existingLinkRegex, "g"), canonicalLink);
             await this.app.vault.adapter.write(currFilePath, updatedText, <DataWriteOptions>{});
             this.debugLog("Updated active file with canonical link text");
+        }
+    }
+
+    debugLog(message: string) {
+        if (this.settings.debugMode) {
+            console.log("[DEBUG] " + message);
         }
     }
 }
@@ -391,8 +394,8 @@ class SettingsTab extends PluginSettingTab {
             );
 
         new Setting(containerEl)
-            .setName("Footer Tag Text")
-            .setDesc("Common tag placed at the bottom of passage notes will use this value (can be used to link all passages to a central tag).  Empty text will not place tag")
+            .setName("Tag Text")
+            .setDesc("Common tag placed within passage notes will use this value (can be used to link all passages to a central tag).  Empty text will not place tag")
             .addText(c => c
                 .setValue(this.plugin.settings.footerTagText)
                 .onChange(async value => {

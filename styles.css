@@ -1,1 +1,15 @@
+*[src*="Embedded Bible Passages"] .markdown-embed-title {
+    display: none;
+}
 
+*[src*="Embedded Bible Passages"] .markdown-embed {
+    margin: 1em 30px 0px 30px;
+    border: 1px solid var(--background-modifier-border);
+    border-radius: 5px;
+    padding: 0px 20px;
+    /*border-left-width: 5px;*/
+}
+
+*[src*="Embedded Bible Passages"] .markdown-preview-view {
+    padding: 10px 0px 0px 0px;
+}
