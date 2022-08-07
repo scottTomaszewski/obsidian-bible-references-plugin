@@ -269,7 +269,19 @@ class SampleSettingTab extends PluginSettingTab {
                 })
             );
 
-        this.newBooleanSetting("Footer Link to Chapter", containerEl, "Include a link to the full chapter at the bottom of a passage note.");
+        new Setting(containerEl)
+            .setName("Footer Link to Chapter")
+            .setDesc("Include a link to the full chapter at the bottom of a passage note.")
+            .addToggle(c => c
+                // @ts-ignore
+                .setValue(this.plugin.settings.footerLinkToChapter)
+                .onChange(async value => {
+                    // @ts-ignore
+                    this.plugin.settings.footerLinkToChapter = value;
+                    await this.plugin.saveSettings();
+                    this.plugin.debugLog("Boolean setting " + "Footer Link to Chapter" + " updated to " + value);
+                })
+            );
 
         new Setting(containerEl)
             .setName("Footer Link Text")
