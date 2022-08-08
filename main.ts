@@ -21,6 +21,7 @@ interface BibleReferenceSettings {
     includeChapterNumbers: boolean;
     includeSubheadings: boolean;
     includeAudioLink: boolean;
+    windowsFix: boolean;
     attachAudioLinkTo: string;
 }
 
@@ -45,6 +46,7 @@ const DEFAULT_SETTINGS: BibleReferenceSettings = {
     includeChapterNumbers: true,
     includeSubheadings: true,
     includeAudioLink: true,
+    windowsFix: false,
     attachAudioLinkTo: "passage",
 }
 
@@ -60,7 +62,7 @@ export default class MyPlugin extends Plugin {
     }
 
     async onload() {
-        const bibleRefRegex = new RegExp("(?:\\d+ ?)?[a-z]+ ?\\d+(?:(?::\\d+)?(?: ?- ?(?:\\d+ [a-z]+ )?\\d+(?::\\d+)?)?)?");
+        const bibleRefRegex = new RegExp("(?:\\d+ ?)?[a-z]+ ?\\d+(?:(?:[:.]\\d+)?(?: ?- ?(?:\\d+ [a-z]+ )?\\d+(?:[:.]\\d+)?)?)?");
 
         console.log('Loading ' + pluginDisplayName);
 
@@ -105,7 +107,7 @@ export default class MyPlugin extends Plugin {
 
                     // Build up url
                     this.debugLog("Note for " + reference + " does not exist.  Requesting from ESV.org...");
-                    const normalizedRef = reference.replace(" ", "+");
+                    const normalizedRef = reference.replace(" ", "+").replace(".", ":");
                     let url = "https://api.esv.org/v3/passage/html/?q=" + normalizedRef;
                     url += "&include-passage-references=" + this.settings.includePassageReferences;
                     url += "&include-verse-numbers=" + this.settings.includeVerseNumbers;
@@ -138,7 +140,7 @@ export default class MyPlugin extends Plugin {
                     // TODO - check that auth didnt fail
 
                     // Check that the passage reference is valid
-                    const canonicalRef = passageData["canonical"];
+                    const canonicalRef = (this.settings.windowsFix) ? passageData["canonical"].replace(":",".") : passageData["canonical"];
                     if (canonicalRef == null || canonicalRef == "") {
                         this.debugLog("Query " + normalizedRef + " is not a valid reference")
                         return;
@@ -267,7 +269,19 @@ class SampleSettingTab extends PluginSettingTab {
                 })
             );
 
-        this.newBooleanSetting("Footer Link to Chapter", containerEl, "Include a link to the full chapter at the bottom of a passage note.");
+        new Setting(containerEl)
+            .setName("Footer Link to Chapter")
+            .setDesc("Include a link to the full chapter at the bottom of a passage note.")
+            .addToggle(c => c
+                // @ts-ignore
+                .setValue(this.plugin.settings.footerLinkToChapter)
+                .onChange(async value => {
+                    // @ts-ignore
+                    this.plugin.settings.footerLinkToChapter = value;
+                    await this.plugin.saveSettings();
+                    this.plugin.debugLog("Boolean setting " + "Footer Link to Chapter" + " updated to " + value);
+                })
+            );
 
         new Setting(containerEl)
             .setName("Footer Link Text")
@@ -314,6 +328,7 @@ class SampleSettingTab extends PluginSettingTab {
         this.newBooleanSetting("includeChapterNumbers", containerEl, "Include a chapter number if the first verse in a chapter is in the requested text.");
         this.newBooleanSetting("includeSubheadings", containerEl, "Include subheadings. Subheadings are the titles of psalms (e.g., Psalm 73's 'A Maskil of Asaph'), the acrostic divisions in Psalm 119, the speakers in Song of Solomon, and the textual notes that appear in John 7 and Mark 16.");
         this.newBooleanSetting("includeAudioLink", containerEl, "Include a link to the audio version of the requested passage. The link appears in a small tag in the passage's identifying h2 tag.");
+        this.newBooleanSetting("windowsFix", containerEl, "Use '.' instead of ':' to separate chapter and verse. This avoids the issue of ':' being invalid in Windows file paths.");
 
         new Setting(containerEl)
             .setName("attachAudioLinkTo")
